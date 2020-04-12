@@ -1,6 +1,6 @@
 ## CLI COVID19 INFORMATION DISPLAYER   (under maintenance)
 
-This python script display world COVID19 information beside of specified country
+This python script display world COVID19 informations beside of specified country daily and total informations
 Script ask for country name, you can use country name or country code for getting the information
 Made with Python3
 
