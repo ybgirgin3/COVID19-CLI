@@ -4,10 +4,14 @@
 # Author: Yusuf Berkay Girgin
 # Date: 12 April 2020, 02:29
 
-
 import requests as req
+from platform import system as plt
+from os import system as oss
 from pprint import pprint
 import json
+import sys
+import connectionControl
+
 
 
 """
@@ -27,6 +31,13 @@ expected output:
 # api = 'https://api.covid19api.com/country/south-africa/status/confirmed'
 # api = 'https://api.covid19api.com/country'
 # api = 'https://api.covid19api.com/countries'
+def clean():
+    if plt == 'Windows':
+        oss('cls')      # for windows
+    else:
+        oss('clear')    # for linux and darwin
+
+
 
 def api_customization(BASE_API):
     api = req.get(BASE_API).text
@@ -35,13 +46,15 @@ def api_customization(BASE_API):
 
 def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
                         world_death, world_new_recovered, world_total_recovered, \
-                        cnt, cnt_total_cases, cnt_total_living_case, cnt_total_death, cnt_total_recovered, \
-                        dayone_cases, dayone_deaths, dayone_recovered):
+                        cnt, cnt_total_cases, cnt_total_living_case, cnt_total_death,\
+                        cnt_total_recovered, dayone_cases, dayone_deaths, dayone_recovered, date, lat, lon):
+    # clean terminal screen before printing
+    clean()
     # this will print items on shell
     print(f"""
         WORLD TOTAL INFORMATION
 
-         CONFIRMED
+        CONFIRMED
     New Confirmed   :   {world_new_confirmed}
     Total Confirmed :   {world_confirmed}
 
@@ -56,7 +69,7 @@ def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
 
 
 
-        LASTEST INFORMATION OF {cnt}
+        LASTEST INFORMATION OF THE {cnt} (date: {date}) (latitude: {lat}, longtitude: {lon})
 
         TOTAL
     Cases           :   {cnt_total_cases}
@@ -66,7 +79,7 @@ def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
 
         DAYONE
     Cases           :   {dayone_cases}
-    Deaths          :   {dayone_deaths}      
+    Deaths          :   {dayone_deaths}
     Recovered       :   {dayone_recovered}
 
 
@@ -86,13 +99,9 @@ def byCountry(api, cnt):#, country):
     w_new_conf = glob['NewConfirmed']
     w_total_conf = glob['TotalConfirmed']
     w_new_death = glob['NewDeaths']
-    w_total_death = glob['TotalDeaths']
+    w_total_death = glob['NewDeaths']
     w_new_rec = glob['NewRecovered']
     w_total_rec = glob['TotalRecovered']
-
-    
-
-
 
     ######### total information for only specified country ########
     api = api_customization(api)
@@ -107,7 +116,7 @@ def byCountry(api, cnt):#, country):
 
     # bu zamana kadar ki toplam hastalıklar
     cnt_total_cases = focus['Confirmed']
-    
+
     # şu anki ölmemiş hasta sayısı
     cnt_total_living_case = focus['Active']
     cnt_total_death = focus['Deaths']
@@ -123,15 +132,16 @@ def byCountry(api, cnt):#, country):
     dayone_deaths = cnt_total_death - before_api['Deaths']
     dayone_recovered = cnt_total_recovered - before_api['Recovered']
 
-
-
-
+    ## contry location information
+    lat = focus['Lat']
+    lon = focus['Lon']
+    date = focus['Date']
 
 
     # information_return(countryname, cases, death, recovered)
     information_return(w_new_conf, w_total_conf, w_new_death, w_total_death, w_new_rec, w_total_rec, \
                         cnt, cnt_total_cases, cnt_total_living_case, cnt_total_death, cnt_total_recovered, \
-                        dayone_cases, dayone_deaths, dayone_recovered)
+                        dayone_cases, dayone_deaths, dayone_recovered, date, lat, lon)
 
 
 
@@ -139,10 +149,13 @@ def byCountry(api, cnt):#, country):
 
 if __name__ == '__main__':
     # kullanıcıdan bileşenler al ve onlara göre gerekli olan fonksiyonlara dön
-    
+
     # get country
-    cnt = input('country: ')
+    # cnt = input('country: ')
+    cnt = sys.argv[1]
 
     # kullanmam gereken bu api
     arg = f'https://api.covid19api.com/live/country/{cnt}/status/confirmed'
-    byCountry(arg, cnt)
+    if connectionControl.chknet():
+        byCountry(arg, cnt)
+    else: os.system('python3 covid19.py')
