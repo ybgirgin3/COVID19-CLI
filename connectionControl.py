@@ -8,7 +8,7 @@ import requests as req
 
 def chknet():
     colorama.init()
-    url = 'https://api.binance.com/api/v3/ticker/price'
+    url = 'https://www.google.com/'
     timeout = 5
 
     resp = req.get(url, timeout=timeout)
