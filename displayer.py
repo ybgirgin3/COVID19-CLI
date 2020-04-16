@@ -11,10 +11,6 @@ def clean():
     else:
         oss('clear')    # for linux and darwin
 
-    
-
-
-
 
 def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
                         world_death, world_new_recovered, world_total_recovered, \
@@ -23,7 +19,7 @@ def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
     # clean terminal screen before printing
     clean()
     # this will print items on shell
-    print(f"""
+    return f"""
         WORLD TOTAL INFORMATION
 
         CONFIRMED
@@ -56,5 +52,5 @@ def information_return(world_new_confirmed, world_confirmed, world_new_deaths, \
 
 
 
-    """)
+    """
 # end file
