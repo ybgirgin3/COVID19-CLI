@@ -94,9 +94,9 @@ def byCountry(api, cnt):#, country):
 
 
     # information_return(countryname, cases, death, recovered)
-    displayer.information_return(w_new_conf, w_total_conf, w_new_death, w_total_death, w_new_rec, w_total_rec, \
+    print(displayer.information_return(w_new_conf, w_total_conf, w_new_death, w_total_death, w_new_rec, w_total_rec, \
                         cnt, cnt_total_cases, cnt_total_living_case, cnt_total_death, cnt_total_recovered, \
-                        dayone_cases, dayone_deaths, dayone_recovered, date, lat, lon)
+                        dayone_cases, dayone_deaths, dayone_recovered, date, lat, lon))
 
 
 
